@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Change to Main/Release Branch
+    name: Publish API Spec
     runs-on: ubuntu-latest
     steps:
 
