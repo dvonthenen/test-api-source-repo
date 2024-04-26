@@ -27,7 +27,10 @@ jobs:
       - name: Get the Tag
         id: get_version
         shell: bash
-        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> "$GITHUB_ENV"
+        run: |
+          export TAG_NAME="${GITHUB_REF##*/}"
+          echo "TAG_NAME: $TAG_NAME"
+          echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
 
       - name: Trigger Downstream API Change
         shell: bash
@@ -37,4 +40,4 @@ jobs:
           gh workflow run --repo https://github.com/dvonthenen/test-sdk-target-repo/ \
             --ref main \
             api-spec-change.yaml \
-            --raw-field release_version=${{ steps.get_version.outputs.TAG_NAME }}
+            --raw-field release_version=${{ env.TAG_NAME }}
