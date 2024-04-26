@@ -6,8 +6,6 @@ on:
       - "!not_activated_on_branches!*"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
-    paths:
-      - "api/api.yaml"
 
 jobs:
   build:
@@ -15,17 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Check out code
-        uses: actions/checkout@v1
+      - name: Checkout code from main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          repository: ${{ github.repository }}
 
       - name: Ensure dependencies installed
         shell: bash
         run: |
           make ensure-deps
 
+      - name: Get the Tag
+        id: get_version
+        shell: bash
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> "$GITHUB_ENV"
+
       - name: Trigger Downstream API Change
         shell: bash
         run: |
           gh workflow run --repo https://github.com/dvonthenen/test-sdk-target-repo/ \
             --ref main \
-            api-spec-change.yaml
+            api-spec-change.yaml \
+            --raw-field release_version=${{ steps.get_version.outputs.TAG_NAME }}
