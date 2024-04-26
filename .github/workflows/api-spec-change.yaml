@@ -31,6 +31,8 @@ jobs:
 
       - name: Trigger Downstream API Change
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           gh workflow run --repo https://github.com/dvonthenen/test-sdk-target-repo/ \
             --ref main \
