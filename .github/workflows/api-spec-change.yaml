@@ -1,13 +1,13 @@
 name: API Spec Change
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
-      - release-*
+      - "!not_activated_on_branches!*"
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
     paths:
-        - "api/sdk.spec"
-    tags-ignore:
-      - "**"
+      - "api/api.yaml"
 
 jobs:
   build:
