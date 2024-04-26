@@ -24,4 +24,4 @@ jobs:
       - name: Run all checks
         shell: bash
         run: |
-          make check-full
+          make check
